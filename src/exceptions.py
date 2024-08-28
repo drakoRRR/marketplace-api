@@ -34,3 +34,11 @@ class UserAlreadyExistsException(HTTPException):
             status_code=status.HTTP_409_CONFLICT,
             detail="User already exist"
         )
+
+
+class ProductAlreadyExistsException(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Product already exist"
+        )

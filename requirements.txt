@@ -17,3 +17,9 @@ passlib==1.7.4
 bcrypt==3.2.0
 pydantic[email]
 python-multipart
+fastapi-pagination
+sqladmin==0.18.0
+itsdangerous
+aioredis
+fastapi-cache2
+redis

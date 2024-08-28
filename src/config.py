@@ -9,6 +9,8 @@ load_dotenv()
 DEBUG: int = os.getenv("DEBUG", 1)
 SECRET_KEY: str = os.getenv("SECRET_KEY", "secret_key")
 
+REDIS_HOST = os.getenv("REDIS_HOST", "redis")
+
 POSTGRES_USER: str = os.getenv("POSTGRES_USER", default="postgres")
 POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", default="postgres")
 DB_HOST: str = os.getenv("DB_HOST", default="0.0.0.0")

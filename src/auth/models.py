@@ -5,9 +5,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import Base
+from src.mixin_models import TimestampMixin
 
 
-class User(Base):
+class User(Base, TimestampMixin):
     """User model representing users in the application."""
     __tablename__ = "user"
 
@@ -17,8 +18,6 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class TokenBlacklist(Base):

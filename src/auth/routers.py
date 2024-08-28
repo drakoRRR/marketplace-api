@@ -19,7 +19,10 @@ auth_router = APIRouter()
 
 
 @auth_router.post("/register", status_code=status.HTTP_201_CREATED, response_model=ShowUser)
-async def create_user(body: UserCreate, db: AsyncSession = Depends(get_db)):
+async def create_user(
+    body: UserCreate,
+    db: AsyncSession = Depends(get_db)
+):
     try:
         new_user = await _create_new_user(body, db)
         return new_user
@@ -39,7 +42,9 @@ async def login_for_access_token(
 
 
 @auth_router.post("/refresh", status_code=status.HTTP_200_OK, response_model=TokenPair)
-async def refresh_token(refresh: Annotated[str, None] = None):
+async def refresh_token(
+    refresh: Annotated[str, None] = None
+):
     if not refresh:
         raise BadRequestException(detail="refresh token required")
     return refresh_token_state(token=refresh)
