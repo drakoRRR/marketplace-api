@@ -45,6 +45,10 @@ To down project use ```make down```
 By this url you can achieve API Documentation: http://127.0.0.1:5000/api/docs
 ![swagger](media_readme/swagger.png)
 
+Admin Panel - http://127.0.0.1:5000/admin
+* Username: admin
+* Password: admin
+
 # Main Info
 * `GET /products/` and `GET /products/filter/` has pagination and caching
 * `GET /metrics` can be used for Prometheus/Grafana
