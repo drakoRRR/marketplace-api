@@ -12,7 +12,7 @@ from fastapi_cache.backends.redis import RedisBackend
 
 from src.admin.auth import authentication_backend
 from src.admin.models import UserAdmin, ProductAdmin, ProductCategoryAdmin, OrdersAdmin
-from src.config import DEBUG
+from src.config import DEBUG, SENTRY_URL
 from src.auth.routers import auth_router
 from src.database import async_engine
 from src.products.models import Product
@@ -47,6 +47,25 @@ def create_app():
 
 
 fastapi_app = create_app()
+
+if not bool(DEBUG):
+    try:
+        import sentry_sdk
+
+        from starlette_exporter import PrometheusMiddleware, handle_metrics
+
+        sentry_sdk.init(
+            dsn=SENTRY_URL,
+            # Set traces_sample_rate to 1.0 to capture 100%
+            # of transactions for performance monitoring.
+            # We recommend adjusting this value in production,
+            traces_sample_rate=1.0,
+        )
+
+        fastapi_app.add_middleware(PrometheusMiddleware)
+        fastapi_app.add_route("/metrics", handle_metrics)
+    except ImportError:
+        pass
 
 
 @fastapi_app.on_event("startup")

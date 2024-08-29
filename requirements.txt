@@ -23,3 +23,5 @@ itsdangerous
 aioredis
 fastapi-cache2
 redis
+starlette-exporter==0.15.1
+sentry-sdk[fastapi]
