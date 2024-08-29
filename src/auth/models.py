@@ -23,6 +23,9 @@ class User(Base, TimestampMixin):
     orders = relationship("Order", back_populates="user")
     cart = relationship("Cart", uselist=False, back_populates="user")
 
+    def __str__(self):
+        return self.user_name
+
 
 class TokenBlacklist(Base):
     """Token blacklist model representing tokens in the application."""

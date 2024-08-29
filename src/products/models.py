@@ -28,6 +28,9 @@ class Product(Base, TimestampMixin):
     def available_stock(self):
         return self.stock - self.reserved
 
+    def __str__(self):
+        return f"{self.name}, price:{self.price}"
+
 
 class ProductCategory(Base, TimestampMixin):
     __tablename__ = "product_category"
@@ -46,6 +49,9 @@ class ProductCategory(Base, TimestampMixin):
     def is_root(self):
         """Check if the category is a root category (has no parent)."""
         return self.parent_id is None
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class ProductDiscount(Base, TimestampMixin):

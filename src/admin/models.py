@@ -7,6 +7,7 @@ from src.auth.dals import UserDAL
 from src.auth.hashing import Hasher
 from src.database import async_session
 from src.exceptions import UserAlreadyExistsException
+from src.orders.models import Order
 from src.products.models import Product, ProductCategory
 
 
@@ -112,3 +113,13 @@ class ProductCategoryAdmin(BaseModel, model=ProductCategory):
     column_list = [ProductCategory.id, ProductCategory.name, ProductCategory.name]
     column_searchable_list = [ProductCategory.name]
     form_columns = [ProductCategory.name, ProductCategory.description, ProductCategory.parent]
+
+
+class OrdersAdmin(BaseModel, model=Order):
+    name = "Orders"
+    name_plural = "Orders"
+    icon = "fa-solid"
+
+    column_list = [Order.order_id, Order.user_id, Order.status]
+    column_searchable_list = [Order.order_id]
+    form_columns = [Order.user, Order.items, Order.status]

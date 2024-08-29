@@ -11,7 +11,7 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 
 from src.admin.auth import authentication_backend
-from src.admin.models import UserAdmin, ProductAdmin, ProductCategoryAdmin
+from src.admin.models import UserAdmin, ProductAdmin, ProductCategoryAdmin, OrdersAdmin
 from src.config import DEBUG
 from src.auth.routers import auth_router
 from src.database import async_engine
@@ -59,6 +59,7 @@ admin = Admin(fastapi_app, async_engine, authentication_backend=authentication_b
 admin.add_view(UserAdmin)
 admin.add_view(ProductAdmin)
 admin.add_view(ProductCategoryAdmin)
+admin.add_view(OrdersAdmin)
 
 
 main_api_router = APIRouter()
