@@ -96,3 +96,36 @@ async def test_update_order_status(client: AsyncClient, db_async_session: AsyncS
 
     order_response = response.json()
     assert order_response["status"] == new_status.value
+
+
+async def test_sales_report(client: AsyncClient, db_async_session: AsyncSession, user: User):
+    category = ProductCategory(name="Electronics Entertainment 5")
+    db_async_session.add(category)
+    await db_async_session.commit()
+
+    product = Product(
+        name="Laptop Monster W",
+        description="Gaming Laptop",
+        category_id=category.id,
+        price=1200.00,
+        stock=10,
+        is_active=True
+    )
+    db_async_session.add(product)
+    await db_async_session.commit()
+
+    order = Order(user_id=user.user_id, status=OrderStatus.COMPLETED)
+    db_async_session.add(order)
+    await db_async_session.commit()
+
+    order_item = OrderItem(
+        order_id=order.order_id,
+        product_id=product.id,
+        quantity=1
+    )
+    db_async_session.add(order_item)
+    await db_async_session.commit()
+
+    response = await client.get("order/sales_report", params={"start_date": "2024-01-01", "min_quantity": 1})
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()) > 0

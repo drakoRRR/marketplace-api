@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from decimal import Decimal
+
+from pydantic import BaseModel, computed_field
 from uuid import UUID
 from typing import List, Optional
 from datetime import datetime
@@ -14,3 +16,18 @@ class OrderResponse(TunedModel):
     created_at: datetime
     updated_at: datetime
 
+
+class ProductReportResponse(TunedModel):
+    id: UUID
+    name: str
+    price: Decimal
+
+
+class OrderItemResponse(TunedModel):
+    order_item_id: UUID
+    product: ProductReportResponse
+    quantity: int
+
+    @computed_field
+    def total_price(self) -> Decimal:
+        return self.quantity * self.product.price
