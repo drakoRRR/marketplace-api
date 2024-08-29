@@ -3,20 +3,15 @@ from decimal import Decimal
 from typing import Optional
 
 from pydantic import BaseModel
+from src.schemas import TunedModel
 
 
-class BaseProduct(BaseModel):
-
-    class Config:
-        from_attributes = True
-
-
-class ProductDiscountResponse(BaseModel):
+class ProductDiscountResponse(TunedModel):
     id: UUID
     discount_percentage: int
 
 
-class ProductCreate(BaseProduct):
+class ProductCreate(TunedModel):
     name: str
     description: Optional[str] = None
     category_id: UUID
@@ -24,7 +19,7 @@ class ProductCreate(BaseProduct):
     stock: int
 
 
-class ProductUpdate(BaseProduct):
+class ProductUpdate(TunedModel):
     name: Optional[str] = None
     description: Optional[str] = None
     category_id: Optional[UUID] = None

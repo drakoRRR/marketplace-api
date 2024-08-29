@@ -23,6 +23,8 @@ if config.config_file_name is not None:
 from src.database import Base
 from src.auth.models import User, TokenBlacklist
 from src.products.models import Product, ProductCategory, ProductDiscount
+from src.shopping_cart.models import Cart, CartItem
+from src.orders.models import Order, OrderItem
 target_metadata = Base.metadata
 
 from src.config import DATABASE_URL

@@ -19,6 +19,8 @@ from src.products.models import Product
 from src.products.routers import product_router
 from src.utils import create_admin_user
 from src.database import redis_conn
+from src.shopping_cart.routers import cart_router
+from src.orders.routers import order_router
 
 
 load_dotenv()
@@ -62,6 +64,8 @@ admin.add_view(ProductCategoryAdmin)
 main_api_router = APIRouter()
 fastapi_app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 fastapi_app.include_router(product_router, prefix="/products", tags=["Products"])
+fastapi_app.include_router(cart_router, prefix="/cart", tags=["Shopping Cart"])
+fastapi_app.include_router(order_router, prefix="/order", tags=["Orders"])
 fastapi_app.include_router(main_api_router)
 
 

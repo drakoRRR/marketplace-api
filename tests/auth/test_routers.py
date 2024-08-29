@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.hashing import Hasher
 from src.auth.models import TokenBlacklist, User
-from tests.auth.utils import EMAIL, PASSWORD, USER_NAME, create_test_user
+from tests.conftest import EMAIL, PASSWORD, USER_NAME
 from tests.conftest import client, db_async_session
 
 
@@ -36,8 +36,7 @@ async def test_register(client: AsyncClient, db_async_session: AsyncSession):
     assert user.email == email
 
 
-async def test_login(client: AsyncClient, db_async_session: AsyncSession):
-    await create_test_user(db_async_session)
+async def test_login(client: AsyncClient, db_async_session: AsyncSession, user: User):
     response = await client.post(
         "/auth/login",
         data={"username": USER_NAME, "password": PASSWORD},
@@ -52,8 +51,7 @@ async def test_login(client: AsyncClient, db_async_session: AsyncSession):
     assert response_data["token_type"] == "bearer"
 
 
-async def test_bad_login(client: AsyncClient, db_async_session: AsyncSession):
-    await create_test_user(db_async_session)
+async def test_bad_login(client: AsyncClient, db_async_session: AsyncSession, user: User):
     response = await client.post(
         "/auth/login",
         data={"username": USER_NAME + "12", "password": PASSWORD},
@@ -63,8 +61,7 @@ async def test_bad_login(client: AsyncClient, db_async_session: AsyncSession):
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-async def test_refresh(client: AsyncClient, db_async_session: AsyncSession):
-    await create_test_user(db_async_session)
+async def test_refresh(client: AsyncClient, db_async_session: AsyncSession, user: User):
     response = await client.post(
         "/auth/login",
         data={"username": USER_NAME, "password": PASSWORD},
@@ -85,8 +82,7 @@ async def test_refresh(client: AsyncClient, db_async_session: AsyncSession):
     assert response_data["token_type"] == "bearer"
 
 
-async def test_bad_refresh(client: AsyncClient, db_async_session: AsyncSession):
-    await create_test_user(db_async_session)
+async def test_bad_refresh(client: AsyncClient, db_async_session: AsyncSession, user: User):
     response = await client.post(
         "/auth/login",
         data={"username": USER_NAME, "password": PASSWORD},
@@ -111,9 +107,7 @@ async def test_bad_refresh_blank(client: AsyncClient, db_async_session: AsyncSes
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-async def test_logout(client: AsyncClient, db_async_session: AsyncSession):
-    await create_test_user(db_async_session)
-
+async def test_logout(client: AsyncClient, db_async_session: AsyncSession, user: User):
     response_login = await client.post(
         "/auth/login",
         data={"username": USER_NAME, "password": PASSWORD},
@@ -136,10 +130,8 @@ async def test_logout(client: AsyncClient, db_async_session: AsyncSession):
     assert blacklisted_token.token == response_login.json()["access"]
 
 
-async def test_change_password(client: AsyncClient, db_async_session: AsyncSession):
-    user = await create_test_user(db_async_session)
+async def test_change_password(client: AsyncClient, db_async_session: AsyncSession, user: User):
     new_password = PASSWORD + "qwerty1234"
-    print("User old hashed password: ", user.hashed_password)
 
     response_login = await client.post(
         "/auth/login",
@@ -156,11 +148,8 @@ async def test_change_password(client: AsyncClient, db_async_session: AsyncSessi
         }
     )
 
-    print("User new hashed password: ", user.hashed_password)
-
     response_data = response.json()
     assert response_data["msg"] == "Password changed successfully"
-    # assert Hasher.verify_password(new_password, user.hashed_password) is True
 
     response_login = await client.post(
         "/auth/login",

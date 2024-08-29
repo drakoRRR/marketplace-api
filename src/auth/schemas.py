@@ -1,13 +1,7 @@
 import uuid
 
 from pydantic import BaseModel, EmailStr
-
-
-class TunedModel(BaseModel):
-    class Config:
-        """tells pydantic to convert even non dict obj to json"""
-
-        from_attributes = True
+from src.schemas import TunedModel
 
 
 class ShowUser(TunedModel):

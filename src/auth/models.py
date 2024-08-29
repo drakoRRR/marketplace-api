@@ -3,6 +3,7 @@ import uuid
 from sqlalchemy import Boolean, Column, DateTime, String, func, select
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import relationship
 
 from src.database import Base
 from src.mixin_models import TimestampMixin
@@ -18,6 +19,9 @@ class User(Base, TimestampMixin):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
+
+    orders = relationship("Order", back_populates="user")
+    cart = relationship("Cart", uselist=False, back_populates="user")
 
 
 class TokenBlacklist(Base):
