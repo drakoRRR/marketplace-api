@@ -30,16 +30,6 @@ EMAIL = "example@example.com"
 PASSWORD = "qwerty1234"
 
 
-# @pytest.fixture(scope="session", autouse=True)
-# def test_db():
-#     """Create and drop the test database tables."""
-#     Base.metadata.create_all(bind=sync_test_engine)
-#     try:
-#         yield
-#     finally:
-#         Base.metadata.drop_all(bind=sync_test_engine)
-
-
 async def test_get_db() -> AsyncGenerator[AsyncSession, None]:
     """Dependency for getting async session"""
     session: AsyncSession = async_test_session()
